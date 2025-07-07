@@ -133,7 +133,8 @@ const EnhancedManualEntry: React.FC<EnhancedManualEntryProps> = ({ isDark }) => 
       if (predictionError) throw predictionError;
 
       setPrediction(predictionResult);
-      setActiveTab('wellness'); // Switch to wellness tab after prediction
+      // Keep the assessment tab active to show AI analysis results
+      setActiveTab('assessment');
     } catch (err: any) {
       setError('Failed to process health assessment. Please try again.');
       console.error('Prediction error:', err);
