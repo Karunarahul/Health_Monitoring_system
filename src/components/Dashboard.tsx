@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import VitalsChart from './VitalsChart';
 import VitalCard from './VitalCard';
 import AlertBanner from './AlertBanner';
-import axios from 'axios';
+import { apiClient } from '../utils/apiClient';
 import { Heart, Thermometer, Droplets, Wind } from 'lucide-react';
 
 interface VitalsData {
@@ -27,9 +27,9 @@ const Dashboard: React.FC<DashboardProps> = ({ isDark }) => {
   useEffect(() => {
     const fetchVitals = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/vitals');
-        setCurrentVitals(response.data.current);
-        setVitalsHistory(response.data.history);
+        const data = await apiClient.getVitals();
+        setCurrentVitals(data.current);
+        setVitalsHistory(data.history);
         setIsConnected(true);
       } catch (error) {
         setIsConnected(false);

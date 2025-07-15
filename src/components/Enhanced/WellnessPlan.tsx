@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../lib/supabase';
-import axios from 'axios';
+import { apiClient } from '../../utils/apiClient';
 
 interface WellnessPlanProps {
   vitals: {
@@ -125,14 +125,14 @@ const WellnessPlan: React.FC<WellnessPlanProps> = ({ vitals, prediction, isDark 
       };
 
       // Call backend wellness plan API
-      const response = await axios.post('http://localhost:3001/api/wellness-plan', {
+      const response = await apiClient.generateWellnessPlan(
         userData,
         vitals,
-        riskLevel: prediction!.risk_level,
-        healthHistory: recentPredictions || []
-      });
+        prediction!.risk_level,
+        recentPredictions || []
+      );
 
-      setWellnessPlan(response.data);
+      setWellnessPlan(response);
     } catch (error) {
       console.error('Failed to generate wellness plan:', error);
       // Fallback to basic plan

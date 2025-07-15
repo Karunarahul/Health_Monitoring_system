@@ -11,7 +11,7 @@ import ExplainableAI from './ExplainableAI';
 import ConditionSpecificModels from './ConditionSpecificModels';
 import HealthTimeline from './HealthTimeline';
 import WellnessPlan from './WellnessPlan';
-import axios from 'axios';
+import { apiClient } from '../../utils/apiClient';
 
 interface EnhancedManualEntryProps {
   isDark: boolean;
@@ -104,7 +104,7 @@ const EnhancedManualEntry: React.FC<EnhancedManualEntryProps> = ({ isDark }) => 
         .single();
 
       // Call enhanced AI prediction API
-      const response = await axios.post('http://localhost:3001/api/predict', {
+      const response = await apiClient.predict({
         ...vitalsData,
         userId: user.id,
         age: profile?.age || 30,
@@ -113,7 +113,7 @@ const EnhancedManualEntry: React.FC<EnhancedManualEntryProps> = ({ isDark }) => 
         email: profile?.email
       });
 
-      const predictionResult = response.data.prediction;
+      const predictionResult = response.prediction;
 
       // Save prediction to database
       const { error: predictionError } = await supabase
