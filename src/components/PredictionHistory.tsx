@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import { apiClient } from '../utils/apiClient';
 import { History, User, Calendar, TrendingUp, AlertCircle } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -36,8 +36,8 @@ const PredictionHistory: React.FC<PredictionHistoryProps> = ({ isDark }) => {
   useEffect(() => {
     const fetchPredictions = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/predictions');
-        setPredictions(response.data);
+        const data = await apiClient.getPredictions();
+        setPredictions(data);
       } catch (error) {
         console.error('Failed to fetch predictions:', error);
       } finally {

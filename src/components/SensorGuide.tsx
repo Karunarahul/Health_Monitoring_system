@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import axios from 'axios';
+import { apiClient } from '../utils/apiClient';
 import { 
   Bluetooth, 
   Usb, 
@@ -40,8 +40,8 @@ const SensorGuide: React.FC<SensorGuideProps> = ({ isDark }) => {
   useEffect(() => {
     const fetchSensorInfo = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/sensor-info');
-        setSensorInfo(response.data);
+        const data = await apiClient.getSensorInfo();
+        setSensorInfo(data);
       } catch (error) {
         console.error('Failed to fetch sensor info:', error);
       }

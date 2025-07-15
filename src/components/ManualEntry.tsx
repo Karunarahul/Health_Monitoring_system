@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import axios from 'axios';
+import { apiClient } from '../utils/apiClient';
 import { Brain, User, Calendar, Send, AlertCircle, CheckCircle, Info, Heart, Activity } from 'lucide-react';
 
 interface ManualEntryProps {
@@ -58,8 +58,8 @@ const ManualEntry: React.FC<ManualEntryProps> = ({ isDark }) => {
         temperature: parseFloat(formData.temperature)
       };
 
-      const response = await axios.post('http://localhost:3001/api/predict', vitalsData);
-      setPrediction(response.data.prediction);
+      const response = await apiClient.predict(vitalsData);
+      setPrediction(response.prediction);
     } catch (err) {
       setError('Failed to get prediction. Please check your inputs and try again.');
       console.error('Prediction error:', err);
