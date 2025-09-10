@@ -62,12 +62,16 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, isDark }) => {
       setIsSignUp(false);
     } catch (err: any) {
       // Handle specific error cases
-      if (err.message?.includes('User already registered') || err.message?.includes('user_already_exists')) {
+      if (err.message?.includes('Demo Mode')) {
+        setError(err.message);
+      } else if (err.message?.includes('User already registered') || err.message?.includes('user_already_exists')) {
         setError('This email is already registered. Please sign in instead or use a different email address.');
       } else if (err.message?.includes('Invalid login credentials')) {
         setError('Invalid email or password. Please check your credentials and try again.');
       } else if (err.message?.includes('Email not confirmed')) {
         setError('Please check your email and click the confirmation link before signing in.');
+      } else if (err.message?.includes('Failed to fetch')) {
+        setError('Demo Mode: Database connection not configured. This is a demonstration version with simulated data.');
       } else {
         setError(err.message || 'An error occurred. Please try again.');
       }

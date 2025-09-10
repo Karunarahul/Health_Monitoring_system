@@ -42,6 +42,16 @@ export function useAuth() {
     weight?: number,
     height?: number
   ) => {
+    // Check if Supabase is properly configured
+    if (!import.meta.env.VITE_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL.includes('your-project-id')) {
+      return { 
+        data: null, 
+        error: { 
+          message: 'Demo Mode: Please configure Supabase to enable authentication. Click "Connect to Supabase" in the top right to set up your database.' 
+        } 
+      };
+    }
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -69,6 +79,16 @@ export function useAuth() {
   };
 
   const signIn = async (email: string, password: string) => {
+    // Check if Supabase is properly configured
+    if (!import.meta.env.VITE_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL.includes('your-project-id')) {
+      return { 
+        data: null, 
+        error: { 
+          message: 'Demo Mode: Please configure Supabase to enable authentication. Click "Connect to Supabase" in the top right to set up your database.' 
+        } 
+      };
+    }
+
     return await supabase.auth.signInWithPassword({ email, password });
   };
 

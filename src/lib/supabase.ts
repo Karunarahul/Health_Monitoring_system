@@ -3,11 +3,33 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables');
+// Create a mock client if environment variables are not set
+let supabase;
+
+if (!supabaseUrl || !supabaseAnonKey || supabaseUrl.includes('your-project-id')) {
+  console.warn('Supabase environment variables not configured. Using mock mode.');
+  
+  // Create a mock Supabase client for demo purposes
+  supabase = {
+    auth: {
+      getSession: () => Promise.resolve({ data: { session: null }, error: null }),
+      onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
+      signUp: () => Promise.resolve({ data: { user: null }, error: { message: 'Demo mode: Supabase not configured' } }),
+      signInWithPassword: () => Promise.resolve({ data: { user: null }, error: { message: 'Demo mode: Supabase not configured' } }),
+      signOut: () => Promise.resolve({ error: null })
+    },
+    from: () => ({
+      select: () => ({ eq: () => ({ single: () => Promise.resolve({ data: null, error: null }) }) }),
+      insert: () => ({ select: () => ({ single: () => Promise.resolve({ data: null, error: null }) }) }),
+      update: () => ({ eq: () => Promise.resolve({ data: null, error: null }) }),
+      delete: () => ({ eq: () => Promise.resolve({ data: null, error: null }) })
+    })
+  };
+} else {
+  supabase = createClient(supabaseUrl, supabaseAnonKey);
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export { supabase };
 
 // Types for our database
 export interface Profile {
